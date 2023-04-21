@@ -1,0 +1,45 @@
+﻿<Window x:Class="DiscordBigFileUploader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiscordBigFileUploader"
+        mc:Ignorable="d"
+        Title="Discord File Sender" Height="407" Width="550" Background="#FF1B1B1B" Foreground="White" BorderThickness="0,0,0,0" UseLayoutRounding="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Icon="/Audio-Wave.ico">
+    <Window.Effect>
+        <DropShadowEffect/>
+    </Window.Effect>
+    <Grid x:Name="MainPage" HorizontalAlignment="Center" Width="550" Height="387" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="401*"/>
+            <ColumnDefinition Width="149*"/>
+        </Grid.ColumnDefinitions>
+        <Border BorderThickness="2,2,2,2" BorderBrush="#FF0F0F0F" Grid.ColumnSpan="4" Margin="0,0,0,169">
+        </Border>
+        <Border BorderThickness="2,2,2,2" BorderBrush="#FF0F0F0F" Grid.ColumnSpan="4" Margin="0,218,0,-5">
+        </Border>
+
+        <Button x:Name="selectFileBtn" Content="Select File" HorizontalAlignment="Left" Margin="21,168,0,0" VerticalAlignment="Top" Height="40" Width="100" Grid.Column="2" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="selectFileBtn_Click">
+        </Button>
+        <TextBox x:Name="fileTextBox" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="21,145,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="350" Background="#FF212121" SelectionTextBrush="White" Foreground="White" SelectionBrush="#FF00355F"/>
+        <TextBox x:Name="tokenTextBox" Grid.ColumnSpan="3" Margin="21,46,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Background="#FF212121" SelectionTextBrush="White" Foreground="#FF212121" SelectionBrush="#FF00355F" HorizontalAlignment="Left" Width="350" TextChanged="tokenTextBox_TextChanged"/>
+        <TextBox x:Name="channelTextBox" Grid.ColumnSpan="3" Margin="21,97,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Background="#FF212121" SelectionTextBrush="White" Foreground="White" SelectionBrush="#FF00355F" HorizontalAlignment="Left" Width="169"/>
+        <Label Content="Discord Token:" Grid.ColumnSpan="3" Margin="16,23,0,0" VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Left" Width="87"/>
+        <Label Content="Channel ID:" Grid.ColumnSpan="3" Margin="16,75,314,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Selected File:" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="16,123,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label x:Name="loadingLabel" Content="Waiting for upload..." Grid.Column="3" HorizontalAlignment="Right" Margin="0,37,16,0" VerticalAlignment="Top" Foreground="White"/>
+        <Button x:Name="uploadBtn" Content="Upload" HorizontalAlignment="Right" Margin="0,168,24,0" VerticalAlignment="Top" Height="40" Width="100" Grid.Column="3" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="uploadBtn_Click"/>
+        <Button x:Name="downloadBtn" Content="Download" HorizontalAlignment="Center" Margin="0,337,0,0" VerticalAlignment="Top" Height="40" Width="100" Grid.Column="3" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="downloadBtn_Click"/>
+        <TextBox x:Name="downloadText" Margin="0,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Background="#FF212121" SelectionTextBrush="White" Foreground="White" SelectionBrush="#FF00355F" HorizontalAlignment="Center" Width="360" Height="142" Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
+        <Button x:Name="findTokenBtn" Content="Auto Token" HorizontalAlignment="Left" Margin="286,15,0,0" VerticalAlignment="Top" Height="26" Width="85" Grid.Column="2" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="findTokenBtn_Click"/>
+        <CheckBox Content="Show Token?" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Background="#FF282828" Foreground="White" Checked="CheckBox_Checked"/>
+        <Label x:Name="downloadingLabel" Content="Waiting for download..." Grid.Column="3" HorizontalAlignment="Center" Margin="0,235,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <TextBox x:Name="trashChanBox" Grid.ColumnSpan="3" Margin="202,97,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Background="#FF212121" SelectionTextBrush="White" Foreground="White" SelectionBrush="#FF00355F" HorizontalAlignment="Left" Width="169" TextChanged="trashChanBox_TextChanged"/>
+        <Label Content="Trash Channel:" Grid.ColumnSpan="3" Margin="197,75,115,0" VerticalAlignment="Top" Foreground="White"/>
+        <Button x:Name="findTokenBtn_Copy" Content="Default" HorizontalAlignment="Left" Margin="306,72,0,0" VerticalAlignment="Top" Height="23" Width="65" Grid.Column="2" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="findTrashBtn_Click"/>
+        <Button x:Name="downloadBtn_Copy" Content="Load File" HorizontalAlignment="Center" Margin="0,286,0,0" VerticalAlignment="Top" Height="40" Width="100" Grid.Column="3" BorderThickness="2,2,2,2" Background="#FF2B2B2B" Foreground="White" Click="loadBtn_Click"/>
+
+    </Grid>
+</Window>
