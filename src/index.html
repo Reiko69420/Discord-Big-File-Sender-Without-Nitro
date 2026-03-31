@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Big File Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="/main.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#0a0a0c] text-gray-200 h-screen w-screen overflow-hidden font-sans selection:bg-indigo-500 selection:text-white flex relative">
+
+  <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+
+  <nav class="w-20 md:w-64 border-r border-white/5 bg-white/[0.02] backdrop-blur-xl flex flex-col justify-between transition-all duration-300 z-10">
+    <div>
+      <div class="h-20 flex items-center justify-center md:justify-start md:px-6 border-b border-white/5">
+        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+        </div>
+        <span class="hidden md:block ml-3 font-bold text-lg tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">DBFU</span>
+      </div>
+
+      <div class="p-3 md:p-4 space-y-2">
+        <button onclick="switchTab('upload')" id="nav-upload" class="nav-btn w-full flex items-center justify-center md:justify-start px-3 py-3 rounded-xl transition-all duration-200 bg-white/10 text-white shadow-sm">
+          <svg class="w-6 h-6 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+          <span class="hidden md:block font-medium">Upload</span>
+        </button>
+        
+        <button onclick="switchTab('download')" id="nav-download" class="nav-btn w-full flex items-center justify-center md:justify-start px-3 py-3 rounded-xl transition-all duration-200 hover:bg-white/5 text-gray-400 hover:text-gray-200">
+          <svg class="w-6 h-6 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <span class="hidden md:block font-medium">Download</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-3 md:p-4 border-t border-white/5">
+      <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center justify-center md:justify-start px-3 py-3 rounded-xl transition-all duration-200 hover:bg-white/5 text-gray-400 hover:text-gray-200">
+        <svg class="w-6 h-6 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <span class="hidden md:block font-medium">Settings</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="flex-1 relative overflow-y-auto z-10 flex items-center justify-center p-6 md:p-12">
+    
+    <div id="page-upload" class="page-enter w-full max-w-3xl glass-panel rounded-3xl p-8 shadow-2xl">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Upload File</h2>
+        <p class="text-gray-400 mt-2">Select a file or folder to split and push to Discord.</p>
+      </header>
+
+      <div class="space-y-6">
+        <div id="drop-zone" class="border-2 border-dashed border-white/10 rounded-2xl p-10 text-center hover:border-indigo-500/50 transition-colors duration-300 group">
+          <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-indigo-500/20 transition-colors">
+            <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div class="flex justify-center gap-4 mb-4">
+            <button id="btn-open-file" onclick="openFolder(true)" class="bg-white/10 hover:bg-white/20 text-white font-medium py-2.5 px-6 rounded-xl transition-all duration-200">Select File</button>
+            <button id="btn-open-folder" onclick="openFolder(false)" class="bg-white/10 hover:bg-white/20 text-white font-medium py-2.5 px-6 rounded-xl transition-all duration-200">Select Folder</button>
+          </div>
+          <p class="text-sm text-gray-500">or drop file/folder directly here</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Metadata Channel</label>
+          <input type="text" pattern="\d*" id="metadata-channel" placeholder="12345678910" required class="w-full glass-input rounded-xl px-4 py-3 text-gray-300 outline-none transition-all">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Selected File/Folder</label>
+          <input type="text" id="upload-path" readonly placeholder="No selection made..." class="w-full glass-input rounded-xl px-4 py-3 text-gray-300 outline-none transition-all cursor-not-allowed">
+        </div>
+
+        <button id="btn-upload" onclick="uploadFile(document.getElementById('upload-path').value, 8)" disabled class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 disabled:from-gray-700 disabled:to-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25 disabled:shadow-none mt-4">
+          Initialize Upload
+        </button>
+      </div>
+    </div>
+
+    <div id="page-download" class="hidden w-full max-w-3xl glass-panel rounded-3xl p-8 shadow-2xl">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Download File</h2>
+        <p class="text-gray-400 mt-2">Reassemble a file from Discord using its Json or metadata file.</p>
+      </header>
+
+      <div class="space-y-6">
+        <div class="flex p-1 bg-black/30 rounded-xl w-fit mb-4">
+          <button onclick="setDlMethod('text')" id="tab-dl-text" class="px-6 py-2 rounded-lg bg-white/10 text-white font-medium transition-all shadow-sm">Text Json</button>
+          <button onclick="setDlMethod('file')" id="tab-dl-file" class="px-6 py-2 rounded-lg text-gray-400 hover:text-gray-200 font-medium transition-all">Metadata File</button>
+        </div>
+
+        <div id="dl-text-area">
+          <input id="input-dl-id" type="text" placeholder="Paste Json here..." class="w-full glass-input rounded-xl px-4 py-3 text-white outline-none transition-all">
+        </div>
+
+        <div id="dl-file-area" class="hidden flex gap-3">
+          <div>
+            <div class="flex gap-3">
+              <button onclick="openFolder(true, true)" class="bg-white/10 hover:bg-white/20 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 whitespace-nowrap">Browse</button>
+              <input id="input-metadata-path" type="text" readonly placeholder="Select .json metadata...." class="w-full glass-input rounded-xl px-4 py-3 text-gray-300 cursor-not-allowed">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Destination</label>
+          <div class="flex gap-3">
+            <button onclick="openFolder(false, true)" class="bg-white/10 hover:bg-white/20 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 whitespace-nowrap">Set Path</button>
+            <input id="input-dest-path" type="text" readonly placeholder="Select folder..." class="w-full glass-input rounded-xl px-4 py-3 text-gray-300 cursor-not-allowed">
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button id="btn-download" disabled class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/25 mb-4 relative overflow-hidden group">
+            <span class="relative z-10 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Start Download
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-settings" class="hidden w-full max-w-2xl glass-panel rounded-3xl p-8 shadow-2xl">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Configuration</h2>
+        <p class="text-gray-400 mt-2">Manage your Discord connection and chunk preferences.</p>
+      </header>
+
+      <div class="space-y-8">
+        <div class="bg-black/20 p-6 rounded-2xl border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-[#5865F2]/20 rounded-full flex items-center justify-center">
+              <svg class="w-7 h-7 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-200">Discord Account</h3>
+              <p class="text-sm text-gray-500 transition-colors duration-300" id="discord-status">Checking auth...</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <button id="btn-login" onclick="fetchDiscordToken()" class="bg-[#5865F2] hover:bg-[#4752C4] text-white font-medium py-2 px-6 rounded-xl transition-all shadow-lg shadow-[#5865F2]/20 whitespace-nowrap hidden">
+              Login
+            </button>
+            <button id="btn-logoff" onclick="logOff()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-medium py-2 px-6 rounded-xl transition-all whitespace-nowrap hidden">
+              Log Off
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Trash Channel ID</label>
+            <input id="settings-trash-channel" type="text" placeholder="e.g. 123456789012345678" class="w-full glass-input rounded-xl px-4 py-3 text-white outline-none transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Chunk Size (MB)</label>
+            <div class="relative">
+              <input id="settings-chunk-size" type="number" value="25" min="1" max="25" class="w-full glass-input rounded-xl px-4 py-3 text-white outline-none transition-all pr-12">
+                      <div class="flex justify-end mt-8">
+                        <button id="btn-save-settings" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-8 rounded-xl transition-all shadow-lg">Save Settings</button>
+                      </div>
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">MB</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 ml-1">Free Discord limit is 10MB.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="progress-popup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="popup-content" class="w-full max-w-md glass-panel rounded-2xl p-6 shadow-2xl relative overflow-hidden transform scale-95 translate-y-4 transition-all duration-300">
+      <div class="absolute top-0 left-0 w-full h-1 bg-white/5">
+        <div id="popup-progress-top" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 w-0 transition-all duration-300"></div>
+      </div>
+      
+      <h3 id="popup-title" class="text-2xl font-bold text-white mb-1">Traitement...</h3>
+      <p id="popup-status" class="text-gray-400 text-sm mb-6">Préparation en cours...</p>
+      
+      <div class="w-full bg-black/40 rounded-full h-3 overflow-hidden relative border border-white/5 mb-3">
+        <div id="popup-progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full w-0 transition-all duration-300 ease-out relative">
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center">
+        <!-- <button id="btn-cancel-task" class="text-xs text-red-400 hover:text-red-300 hover:bg-red-400/10 px-3 py-1.5 rounded-lg transition-colors font-medium">Annuler</button>-->
+        <span id="popup-percentage" class="text-lg font-bold text-indigo-400">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

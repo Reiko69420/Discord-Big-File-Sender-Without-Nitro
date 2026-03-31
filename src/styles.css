@@ -1,0 +1,66 @@
+/* Sleek custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Page transition animations */
+.page-enter { animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Helper for progress bar shimmer */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+#drop-zone {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-input {
+  background: rgba(30, 41, 59, 0.85); /* slate-800 bg, more contrast */
+  border: 1px solid rgba(99, 102, 241, 0.2); /* indigo border */
+  color: #f1f5f9; /* slate-100 text */
+  caret-color: #6366f1; /* indigo-500 caret */
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+
+.glass-input:focus {
+  border-color: #6366f1; /* Indigo 500 */
+  background: rgba(30, 41, 59, 1);
+  color: #fff;
+}
+
+/* Popup Animations */
+.popup-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.popup-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.popup-overlay.active .popup-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
